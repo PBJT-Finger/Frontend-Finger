@@ -162,7 +162,7 @@ jobs:
           REGISTRY: ${{ env.REGISTRY }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           GHCR_PAT: ${{ secrets.GHCR_PAT }}
-          GHCR_USER: ${{ secrets.GHCR_USERNAME || github.repository_owner }}
+          GHCR_USER: ${{ secrets.GHCR_USERNAME || github.actor }}
           SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
