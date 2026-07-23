@@ -1,0 +1,219 @@
+name: Finger-App Deploy # trigger: 2026-03-01
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'Dockerfile'
+      - 'nginx.conf'
+      - '.github/workflows/frontend.yml'
+      - 'docker-compose.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/finger-frontend
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ===== JOB 1: BUILD & TEST =====
+  build:
+    name: Build & Push Image
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image-tag: ${{ steps.meta.outputs.version }}
+      image-digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Normalize image name (lowercase)
+        id: image
+        run: echo "name=$(echo '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.image.outputs.name }}
+          tags: |
+            type=sha,prefix=main-,format=short
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL || '/api' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+
+  # ===== JOB 3: DEPLOY TO PRODUCTION =====
+  deploy:
+    name: Deploy to Production
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    timeout-minutes: 10
+    concurrency:
+      group: production-frontend-deploy
+      cancel-in-progress: false
+
+    steps:
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+          tags: tag:ci
+
+      - name: Setup SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          # Check if the key is base64 encoded (starts with 'LS0tLS1CRUdJTi')
+          if echo "$SSH_PRIVATE_KEY" | grep -q '^LS0tLS1CRUdJTi'; then
+            echo "🔑 Decoding base64 SSH key..."
+            echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/deploy_key
+          else
+            echo "🔑 Using plain PEM SSH key..."
+            # Clean up Windows CRLF (\r) and ensure trailing newline
+            echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
+            echo "" >> ~/.ssh/deploy_key
+          fi
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null \
+            && echo "✅ Key valid: $(ssh-keygen -l -f ~/.ssh/deploy_key | awk '{print $2}')" \
+            || { echo "❌ Key parse failed (Check if you copied the full key including BEGIN/END lines without extra spaces!)"; exit 1; }
+
+      - name: Add SSH known host
+        run: |
+          mkdir -p ~/.ssh
+          # Validate secret is set
+          if [ -z "${{ secrets.SSH_HOST }}" ]; then
+            echo "❌ ERROR: Secret SSH_HOST is not set in repository secrets!"
+            exit 1
+          fi
+          # Retry up to 3 times with 10s timeout (Tailscale may need a moment to route)
+          SSH_PORT="${{ secrets.SSH_PORT || '22' }}"
+          for i in 1 2 3; do
+            echo "Attempt $i: keyscan ${{ secrets.SSH_HOST }}:${SSH_PORT}"
+            ssh-keyscan -T 10 -p "${SSH_PORT}" -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null && break
+            echo "Retrying in 5s..."
+            sleep 5
+          done
+          # Verify known_hosts is not empty
+          if [ ! -s ~/.ssh/known_hosts ]; then
+            echo "❌ ERROR: known_hosts is empty. SSH_HOST is unreachable on port ${SSH_PORT}."
+            echo "Check: (1) SSH_HOST secret value, (2) Tailscale routing, (3) server SSH port."
+            exit 1
+          fi
+          chmod 644 ~/.ssh/known_hosts
+          echo "✅ SSH known_hosts populated ($(wc -l < ~/.ssh/known_hosts) entries)"
+
+      - name: Checkout (for docker-compose.yml sync)
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+      - name: Skip compose sync for Swarm
+        run: echo "Swarm stack is managed externally. Skipping compose file sync."
+
+      - name: Deploy frontend
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH || '/opt/finger-app' }}
+          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
+          REGISTRY: ${{ env.REGISTRY }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          GHCR_PAT: ${{ secrets.GHCR_PAT }}
+          GHCR_USER: ${{ secrets.GHCR_USERNAME || github.repository_owner }}
+          SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          : "${SSH_USER:?❌ Secret SSH_USER is not set!}"
+          : "${SSH_HOST:?❌ Secret SSH_HOST is not set!}"
+          : "${SSH_PORT:?❌ Secret SSH_PORT is not set!}"
+
+          IMG_REPO=$(echo "${REGISTRY}/${IMAGE_NAME}" | tr '[:upper:]' '[:lower:]')
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          FRONTEND_IMAGE="${IMG_REPO}:main-${SHORT_SHA}"
+
+          ssh -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=no \
+            -o ConnectTimeout=15 \
+            -p "${SSH_PORT}" \
+            "${SSH_USER}@${SSH_HOST}" \
+            "set -e
+             DEPLOY_PATH='${DEPLOY_PATH}'
+             FRONTEND_IMAGE='${FRONTEND_IMAGE}'
+             GHCR_PAT='${GHCR_PAT}'
+             GHCR_USER='${GHCR_USER}'
+             IMG_REPO='${IMG_REPO}'
+             IMAGE_TAG='${IMAGE_TAG}'
+
+             if [ -n \"\$GHCR_PAT\" ]; then
+               echo '🔐 Logging into GHCR...'
+               echo \"\$GHCR_PAT\" | docker login ghcr.io -u \"\$GHCR_USER\" --password-stdin
+             fi
+
+             echo '🚀 Updating swarm service finger_frontend...'
+             docker service update --image \"\$FRONTEND_IMAGE\" \
+               --force \
+               --with-registry-auth finger_frontend
+
+             echo '✅ Service update stabilized and converged successfully!'
+
+             docker images \"\$IMG_REPO\" --format '{{.Tag}}' | grep '^main-' | sort -r | tail -n +6 | \
+               xargs -r -I {} docker rmi \"\${IMG_REPO}:{}\" || true
+             docker image prune -f || true
+
+             echo '🎉 Frontend deployed: \$IMAGE_TAG'"
+
+      - name: Deployment summary
+        run: |
+          echo "### 🌐 Frontend Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.image-tag }}\`" >> $GITHUB_STEP_SUMMARY
+
+# REQUIRED SECRETS:
+# - SSH_HOST, SSH_USER, SSH_PRIVATE_KEY, SSH_PORT
+# - DEPLOY_PATH       : default /opt/finger
+# - TAILSCALE_AUTHKEY
+# - GHCR_PAT, GHCR_USERNAME (optional)
+# - REACT_APP_API_URL : e.g. https://api.yourdomain.com/api (optional, default /api)
