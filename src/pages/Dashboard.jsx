@@ -1,5 +1,5 @@
 // ==================== UNIFIED DASHBOARD PAGE ====================
-// File: src/pages/Dashboard.jsx
+// File: src/pages/Dashboard.jsx — Trigger Frontend Deploy 2026-07-23
 import React, { useState, useEffect } from "react";
 import {
   Users, Calendar, Clock, LogOut, Home, Menu, X, Cpu, Activity,
