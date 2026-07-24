@@ -1,4 +1,4 @@
-name: Finger-App Deploy # trigger: 2026-03-01
+name: Finger-App Deploy # trigger: 2026-07-24
 
 on:
   push:
@@ -12,6 +12,7 @@ on:
       - 'nginx.conf'
       - '.github/workflows/frontend.yml'
       - 'docker-compose.yml'
+      - 'README.md'
   pull_request:
     branches: [main]
     paths:

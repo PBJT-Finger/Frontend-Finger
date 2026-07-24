@@ -1,4 +1,4 @@
-# 🎓 Sistem Rekap Absensi Kampus
+# 🎓 Sistem Rekap Absensi Kampus <!-- Deployment check: 2026-07-24 -->
 
 Dashboard monitoring kehadiran dosen dan karyawan berbasis fingerspot dengan tampilan yang modern dan user-friendly.
 
