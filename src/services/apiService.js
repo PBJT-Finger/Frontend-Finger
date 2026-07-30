@@ -98,13 +98,21 @@ export const apiService = {
           combineDateTime(row.tanggal, row.jam_masuk || row.jam_keluar) ||
           new Date(row.created_at).toISOString();
 
+        const isAfter22 = (timeStr) => {
+          if (!timeStr) return false;
+          const dt = new Date(timeStr);
+          if (isNaN(dt.getTime())) return false;
+          const h = dt.getUTCHours();
+          return h >= 22 && h < 24;
+        };
+
         const sesi = (() => {
           if (!timeStrRef) return "pagi";
           const dt = new Date(timeStrRef);
           if (!isNaN(dt.getTime())) {
             const h = dt.getUTCHours();
             if (h >= 6 && h < 15) return "pagi";
-            if (h >= 15 && h <= 22) return "malam";
+            if (h >= 15 && h < 22) return "malam";
           }
           return "malam";
         })();
@@ -115,34 +123,38 @@ export const apiService = {
 
         if (row.jam_masuk || (!row.jam_masuk && !row.jam_keluar)) {
           const timeStrIn = combineDateTime(row.tanggal, row.jam_masuk) || new Date(row.created_at).toISOString();
-          results.push({
-            id: `${baseId}_masuk`,
-            user_id: row.user_id,
-            nama: row.nama || "N/A",
-            tipe: tipeVal,
-            statusAbsen: "masuk",
-            terlambat: row.status === "TERLAMBAT",
-            pulangCepat: row.status_keluar === "PULANG_CEPAT",
-            waktu: timeStrIn,
-            is_active: row.is_active,
-            sesi: sesi,
-          });
+          if (!isAfter22(timeStrIn)) {
+            results.push({
+              id: `${baseId}_masuk`,
+              user_id: row.user_id,
+              nama: row.nama || "N/A",
+              tipe: tipeVal,
+              statusAbsen: "masuk",
+              terlambat: row.status === "TERLAMBAT",
+              pulangCepat: row.status_keluar === "PULANG_CEPAT",
+              waktu: timeStrIn,
+              is_active: row.is_active,
+              sesi: sesi,
+            });
+          }
         }
 
         if (row.jam_keluar) {
           const timeStrOut = combineDateTime(row.tanggal, row.jam_keluar);
-          results.push({
-            id: `${baseId}_keluar`,
-            user_id: row.user_id,
-            nama: row.nama || "N/A",
-            tipe: tipeVal,
-            statusAbsen: "keluar",
-            terlambat: false,
-            pulangCepat: row.status_keluar === "PULANG_CEPAT",
-            waktu: timeStrOut,
-            is_active: row.is_active,
-            sesi: sesi,
-          });
+          if (timeStrOut && !isAfter22(timeStrOut)) {
+            results.push({
+              id: `${baseId}_keluar`,
+              user_id: row.user_id,
+              nama: row.nama || "N/A",
+              tipe: tipeVal,
+              statusAbsen: "keluar",
+              terlambat: false,
+              pulangCepat: row.status_keluar === "PULANG_CEPAT",
+              waktu: timeStrOut,
+              is_active: row.is_active,
+              sesi: sesi,
+            });
+          }
         }
 
         return results;
