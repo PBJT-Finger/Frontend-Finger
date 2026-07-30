@@ -103,7 +103,11 @@ export const apiService = {
           const dt = new Date(timeStr);
           if (isNaN(dt.getTime())) return false;
           const h = dt.getUTCHours();
-          return h >= 22 && h < 24;
+          const m = dt.getUTCMinutes();
+          const s = dt.getUTCSeconds();
+          if (h > 22 && h < 24) return true;
+          if (h === 22 && (m > 0 || s > 0)) return true;
+          return false;
         };
 
         const sesi = (() => {
