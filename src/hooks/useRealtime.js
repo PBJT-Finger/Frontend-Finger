@@ -74,15 +74,15 @@ export function useRealtime(activeSection, dbStats, dosenData, karyawanData) {
     try {
       const data = await apiService.fetchRealtimeFeed(date);
 
-      // Deduplikasi: cegah baris duplikat dari DB tampil di feed.
-      // Key: user_id + statusAbsen + jam:menit (UTC)
+      // Deduplikasi: cegah baris duplikat dari DB/stream tampil di feed pada menit yang sama.
+      // Key: user_id + jam:menit (UTC)
       const seen = new Map();
       const deduped = (data || []).filter((item) => {
         const waktu = item.waktu ? new Date(item.waktu) : null;
         const timeKey = waktu && !isNaN(waktu)
           ? `${waktu.getUTCHours()}:${String(waktu.getUTCMinutes()).padStart(2, "0")}`
           : "null";
-        const key = `${item.user_id}_${item.statusAbsen}_${timeKey}`;
+        const key = `${item.user_id}_${timeKey}`;
         if (seen.has(key)) return false;
         seen.set(key, true);
         return true;

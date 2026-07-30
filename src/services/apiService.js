@@ -141,7 +141,12 @@ export const apiService = {
 
         if (row.jam_keluar) {
           const timeStrOut = combineDateTime(row.tanggal, row.jam_keluar);
-          if (timeStrOut && !isAfter22(timeStrOut)) {
+          const inTimeMs = results.length > 0 && results[0].waktu ? new Date(results[0].waktu).getTime() : 0;
+          const outTimeMs = timeStrOut ? new Date(timeStrOut).getTime() : 0;
+          // Abaikan jam_keluar jika sama dengan jam_masuk atau selisih kurang dari 2 menit (120.000 ms)
+          const isSameOrSpam = inTimeMs > 0 && Math.abs(outTimeMs - inTimeMs) < 120000;
+
+          if (timeStrOut && !isAfter22(timeStrOut) && !isSameOrSpam) {
             results.push({
               id: `${baseId}_keluar`,
               user_id: row.user_id,
