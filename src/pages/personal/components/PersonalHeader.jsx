@@ -14,7 +14,7 @@ export default function PersonalHeader({ user, summary, sidebarOpen, setSidebarO
   return (
     <header className="pd-header">
       <div className="pd-header-top">
-        <div className="pd-greeting" style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div className="pd-greeting-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           {/* Menu button for mobile/collapsed desktop to toggle sidebar */}
           <button 
             className="topbar-toggle-btn" 
@@ -24,19 +24,20 @@ export default function PersonalHeader({ user, summary, sidebarOpen, setSidebarO
               borderColor: "rgba(255,255,255,0.3)", 
               background: "rgba(255,255,255,0.1)",
               borderRadius: "6px",
-              padding: "6px"
+              padding: "6px",
+              display: sidebarOpen && window.innerWidth >= 769 ? 'none' : 'flex'
             }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
           </button>
           
-          <div>
+          <div className="pd-greeting">
             <h1 className="pd-title">Halo, {user?.name || "Karyawan"}</h1>
             <span className="pd-role">{user?.role || "DOSEN"}</span>
           </div>
         </div>
-        <button onClick={handleLogout} className="pd-logout-btn" aria-label="Logout">
-          <LogOut size={20} />
+        <button onClick={handleLogout} className="pd-logout-btn" aria-label="Logout" title="Logout">
+          <LogOut size={18} />
         </button>
       </div>
 

@@ -39,9 +39,10 @@
 .pd-header-top {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin: 0 auto 24px;
-  max-width: 900px;
+  align-items: center;
+  margin: 0 auto 32px;
+  max-width: 1200px;
+  width: 100%;
   position: relative;
   z-index: 2;
 }
@@ -93,9 +94,10 @@
 /* Kartu Ringkasan (Summary) - Glassmorphism */
 .pd-stats-container {
   display: flex;
-  gap: 16px;
+  gap: 24px;
   margin: 0 auto;
-  max-width: 900px;
+  max-width: 1200px;
+  width: 100%;
   position: relative;
   z-index: 2;
 }
@@ -107,7 +109,7 @@
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 20px;
-  padding: 16px;
+  padding: 24px;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -119,14 +121,14 @@
 }
 
 .pd-stat-label {
-  font-size: 13px;
+  font-size: 14px;
   color: rgba(255, 255, 255, 0.9);
-  margin: 0 0 8px 0;
+  margin: 0 0 12px 0;
   font-weight: 500;
 }
 
 .pd-stat-value {
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 700;
   margin: 0;
   line-height: 1;
@@ -135,8 +137,8 @@
 /* Area Utama (Main) */
 .pd-main {
   width: 100%;
-  max-width: 900px; /* Responsive Desktop */
-  padding: 24px;
+  max-width: 1200px;
+  padding: 0 24px 24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -361,7 +363,7 @@
   /* Desktop Layout: Grid */
   .pd-main {
     display: grid;
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 1fr 2fr;
     align-items: start;
     gap: 32px;
   }
