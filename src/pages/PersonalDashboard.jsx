@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { LogOut, Calendar, Clock, Bell, User } from "lucide-react";
+import { LogOut, Calendar, Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
 import pushService from "../services/pushService";
-import "../styles/main.css";
+import "../styles/personal.css";
 
 function PersonalDashboard() {
   const navigate = useNavigate();
@@ -16,16 +16,24 @@ function PersonalDashboard() {
   useEffect(() => {
     const currentUser = authService.getCurrentUser();
     setUser(currentUser);
+    
+    // Perbaikan Bug 403: Ambil token langsung dari localStorage, bukan dari objek user yang tidak punya .token
+    const token = localStorage.getItem("token");
 
     // Auto subscribe push if possible, but also give a manual button
-    if (currentUser && currentUser.token) {
+    if (token) {
       if (Notification.permission === 'granted') {
         setPushEnabled(true);
       }
     }
 
-    fetchPersonalData(currentUser?.token);
-  }, []);
+    if (token) {
+      fetchPersonalData(token);
+    } else {
+      // Jika tidak ada token (belum login), kembalikan ke halaman login
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const fetchPersonalData = async (token) => {
     try {
@@ -39,11 +47,15 @@ function PersonalDashboard() {
       if (sumRes.ok) {
         const data = await sumRes.json();
         setSummary(data.data);
+      } else {
+        console.error("Gagal get summary", sumRes.status);
       }
 
       if (histRes.ok) {
         const data = await histRes.json();
         setHistory(data.data);
+      } else {
+        console.error("Gagal get history", histRes.status);
       }
     } catch (err) {
       console.error("Gagal mengambil data personal", err);
@@ -58,8 +70,9 @@ function PersonalDashboard() {
   };
 
   const enablePush = async () => {
-    if (user && user.token) {
-      const success = await pushService.subscribeToPush(user.token);
+    const token = localStorage.getItem("token");
+    if (token) {
+      const success = await pushService.subscribeToPush(token);
       setPushEnabled(success);
       if (success) {
         alert("Notifikasi pengingat berhasil diaktifkan!");
@@ -71,89 +84,89 @@ function PersonalDashboard() {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent"></div>
+      <div className="pd-loading-container">
+        <div className="pd-spinner"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center">
-      {/* Header Minimalis */}
-      <header className="w-full max-w-md bg-emerald-600 text-white p-6 rounded-b-3xl shadow-lg">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold">Halo, {user?.name}</h1>
-            <p className="text-emerald-100 text-sm">{user?.role}</p>
+    <div className="pd-container">
+      {/* Header Minimalis Premium */}
+      <header className="pd-header">
+        <div className="pd-header-top">
+          <div className="pd-greeting">
+            <h1 className="pd-title">Halo, {user?.name || "Karyawan"}</h1>
+            <span className="pd-role">{user?.role || "DOSEN"}</span>
           </div>
-          <button onClick={handleLogout} className="p-2 bg-emerald-700 rounded-full hover:bg-emerald-800 transition">
+          <button onClick={handleLogout} className="pd-logout-btn" aria-label="Logout">
             <LogOut size={20} />
           </button>
         </div>
 
         {/* Info Ringkas */}
-        <div className="flex space-x-4">
-          <div className="flex-1 bg-white/20 p-4 rounded-2xl backdrop-blur-sm">
-            <p className="text-emerald-100 text-sm mb-1">Hadir (Bulan Ini)</p>
-            <p className="text-3xl font-bold">{summary.hadir}</p>
+        <div className="pd-stats-container">
+          <div className="pd-stat-card">
+            <p className="pd-stat-label">Hadir (Bulan Ini)</p>
+            <p className="pd-stat-value">{summary.hadir}</p>
           </div>
-          <div className="flex-1 bg-white/20 p-4 rounded-2xl backdrop-blur-sm">
-            <p className="text-emerald-100 text-sm mb-1">Terlambat</p>
-            <p className="text-3xl font-bold">{summary.terlambat}</p>
+          <div className="pd-stat-card">
+            <p className="pd-stat-label">Terlambat</p>
+            <p className="pd-stat-value">{summary.terlambat}</p>
           </div>
         </div>
       </header>
 
-      <main className="w-full max-w-md p-6 flex-1 flex flex-col gap-6">
+      <main className="pd-main">
         {/* Fitur Pengingat */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
-          <div>
-            <h3 className="font-semibold text-gray-800 dark:text-gray-200">Pengingat Absen</h3>
-            <p className="text-sm text-gray-500">Terima notifikasi di HP Anda</p>
+        <div className="pd-feature-card">
+          <div className="pd-feature-info">
+            <h3 className="pd-feature-title">Pengingat Absen</h3>
+            <p className="pd-feature-desc">Terima notifikasi di HP Anda</p>
           </div>
           <button 
             onClick={enablePush}
             disabled={pushEnabled}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
-              pushEnabled 
-                ? 'bg-gray-100 text-emerald-600 cursor-not-allowed dark:bg-gray-700' 
-                : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
-            }`}
+            className={`pd-feature-btn ${pushEnabled ? 'active' : 'inactive'}`}
           >
             {pushEnabled ? 'Aktif' : 'Aktifkan'}
           </button>
         </div>
 
         {/* Riwayat Absen */}
-        <div className="flex-1">
-          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4">Riwayat Terakhir</h2>
+        <div className="pd-history-section">
+          <h2 className="pd-section-title">Riwayat Terakhir</h2>
+          
           {history.length === 0 ? (
-            <div className="text-center text-gray-500 mt-10">Belum ada data kehadiran.</div>
+            <div className="pd-empty-state">
+              Belum ada data kehadiran bulan ini.
+            </div>
           ) : (
-            <div className="space-y-3">
+            <div className="pd-history-list">
               {history.map((record) => {
                 const dateObj = new Date(record.tanggal);
                 const isLate = record.status === 'TERLAMBAT';
+                
                 return (
-                  <div key={record.id} className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className={`p-2 rounded-lg ${isLate ? 'bg-orange-100 text-orange-600' : 'bg-emerald-100 text-emerald-600'}`}>
+                  <div key={record.id} className="pd-history-card">
+                    <div className="pd-history-left">
+                      <div className={`pd-history-icon-wrapper ${isLate ? 'late' : 'ontime'}`}>
                         <Calendar size={20} />
                       </div>
-                      <div>
-                        <p className="font-medium text-gray-800 dark:text-gray-200">
+                      <div className="pd-history-details">
+                        <p className="pd-history-date">
                           {dateObj.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short' })}
                         </p>
-                        <p className={`text-xs font-medium ${isLate ? 'text-orange-500' : 'text-emerald-500'}`}>
+                        <p className={`pd-history-status ${isLate ? 'late' : 'ontime'}`}>
                           {record.status}
                         </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    <div className="pd-history-right">
+                      <p className="pd-history-time">
                         {record.jam_masuk ? record.jam_masuk.substring(11, 16) : '--:--'}
                       </p>
-                      <p className="text-xs text-gray-500">Masuk</p>
+                      <p className="pd-history-type">Masuk</p>
                     </div>
                   </div>
                 );

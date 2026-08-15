@@ -1,0 +1,336 @@
+/* ==================== PERSONAL DASHBOARD STYLES ==================== */
+/* File: src/styles/personal.css */
+
+.pd-container {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Header Minimalis Premium */
+.pd-header {
+  width: 100%;
+  max-width: 480px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  padding: 32px 24px 24px;
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
+  box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Pola background opsional untuk efek kedalaman */
+.pd-header::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  blur: 10px;
+}
+
+.pd-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.pd-greeting {
+  display: flex;
+  flex-direction: column;
+}
+
+.pd-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.5px;
+}
+
+.pd-role {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pd-logout-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.pd-logout-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.pd-logout-btn:active {
+  transform: scale(0.95);
+}
+
+/* Kartu Ringkasan (Summary) - Glassmorphism */
+.pd-stats-container {
+  display: flex;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.pd-stat-card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 16px;
+  transition: transform 0.2s ease;
+}
+
+.pd-stat-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.pd-stat-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 8px 0;
+  font-weight: 500;
+}
+
+.pd-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+}
+
+/* Area Utama (Main) */
+.pd-main {
+  width: 100%;
+  max-width: 480px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+}
+
+/* Fitur Pengingat */
+.pd-feature-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid #f1f5f9;
+}
+
+.pd-feature-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.pd-feature-title {
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+  font-size: 16px;
+}
+
+.pd-feature-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.pd-feature-btn {
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.pd-feature-btn.active {
+  background-color: #f1f5f9;
+  color: #10b981;
+  cursor: not-allowed;
+}
+
+.pd-feature-btn.inactive {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.pd-feature-btn.inactive:hover {
+  background-color: #a7f3d0;
+  transform: translateY(-1px);
+}
+
+/* Riwayat Absen */
+.pd-history-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.pd-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 16px 0;
+}
+
+.pd-empty-state {
+  text-align: center;
+  color: #94a3b8;
+  padding: 40px 0;
+  font-size: 14px;
+  background: white;
+  border-radius: 20px;
+  border: 1px dashed #cbd5e1;
+}
+
+.pd-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pd-history-card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border: 1px solid #f1f5f9;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pd-history-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.pd-history-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pd-history-icon-wrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pd-history-icon-wrapper.late {
+  background-color: #ffedd5;
+  color: #ea580c;
+}
+
+.pd-history-icon-wrapper.ontime {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.pd-history-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.pd-history-date {
+  font-weight: 600;
+  color: #334155;
+  margin: 0 0 2px 0;
+  font-size: 15px;
+}
+
+.pd-history-status {
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.pd-history-status.late {
+  color: #f97316;
+}
+
+.pd-history-status.ontime {
+  color: #10b981;
+}
+
+.pd-history-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+}
+
+.pd-history-time {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 2px 0;
+}
+
+.pd-history-type {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Loading Spinner */
+.pd-loading-container {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8fafc;
+}
+
+.pd-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(16, 185, 129, 0.2);
+  border-left-color: #10b981;
+  border-radius: 50%;
+  animation: pd-spin 1s linear infinite;
+}
+
+@keyframes pd-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
