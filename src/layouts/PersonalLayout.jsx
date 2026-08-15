@@ -50,19 +50,19 @@ export default function PersonalLayout() {
       />
 
       <div className="dash-main" style={{ backgroundColor: "#f8fafc" }}>
-        <header className="dash-topbar" style={{ background: "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)", color: "white", padding: "16px 24px", border: "none" }}>
+        <header className="dash-topbar">
           <div className="topbar-left">
-            <button className="topbar-toggle-btn" onClick={() => setSidebarOpen((o) => !o)} style={{ color: "white", borderColor: "rgba(255,255,255,0.3)" }}>
+            <button className="topbar-toggle-btn" onClick={() => setSidebarOpen((o) => !o)}>
               <Menu size={18} />
             </button>
             <div className="topbar-breadcrumb">
-              <span className="topbar-breadcrumb-root" style={{ color: "rgba(255,255,255,0.8)" }}>Dasbor Personal</span>
-              <ChevronRight size={14} className="topbar-bc-sep" style={{ color: "rgba(255,255,255,0.8)" }} />
-              <span className="topbar-breadcrumb-current" style={{ color: "white" }}>{sectionTitle}</span>
+              <span className="topbar-breadcrumb-root">Dasbor Personal</span>
+              <ChevronRight size={14} className="topbar-bc-sep" />
+              <span className="topbar-breadcrumb-current">{sectionTitle}</span>
             </div>
           </div>
           <div className="topbar-right">
-             <button onClick={handleLogout} style={{ background: "rgba(255,255,255,0.2)", border: "none", borderRadius: "50%", padding: 8, color: "white", cursor: "pointer" }}>
+             <button onClick={handleLogout} className="topbar-toggle-btn" style={{ border: "none", background: "#fef2f2", color: "#dc2626" }} title="Logout">
                 <LogOut size={16} />
              </button>
           </div>
