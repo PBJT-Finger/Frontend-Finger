@@ -11,29 +11,25 @@
   position: relative;
 }
 
-/* Background Biru Melengkung Premium di Belakang */
+/* Background Biru Premium di Belakang */
 .pd-container::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 380px;
+  height: 400px;
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  border-bottom-left-radius: 48px;
-  border-bottom-right-radius: 48px;
   z-index: 0;
 }
 
 /* Header Minimalis Premium */
 .pd-header {
   width: 100%;
-  max-width: 100%;
   background: transparent;
   color: white;
-  padding: 32px 24px 48px;
-  border-radius: 0;
-  box-shadow: none;
+  padding-top: 40px;
+  padding-bottom: 80px;
   position: relative;
   overflow: visible;
   z-index: 2;
@@ -58,8 +54,9 @@
   justify-content: space-between;
   align-items: center;
   margin: 0 auto 32px;
-  max-width: 1400px;
+  max-width: 1200px;
   width: 100%;
+  padding: 0 24px;
   position: relative;
   z-index: 2;
 }
@@ -113,8 +110,9 @@
   display: flex;
   gap: 24px;
   margin: 0 auto;
-  max-width: 1400px;
+  max-width: 1200px;
   width: 100%;
+  padding: 0 24px;
   position: relative;
   z-index: 2;
 }
@@ -154,13 +152,13 @@
 /* Area Utama (Main) */
 .pd-main {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1200px;
   padding: 0 24px 24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
   flex: 1;
-  margin: -48px auto 0;
+  margin: -60px auto 0;
   position: relative;
   z-index: 10;
 }
