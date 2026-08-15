@@ -44,7 +44,7 @@ export default function PersonalLayout() {
       />
 
       {/* Main Container edge-to-edge */}
-      <div className="dash-main" style={{ backgroundColor: "#f8fafc", padding: 0 }}>
+      <div className="dash-main" style={{ backgroundColor: "#f1f5f9", padding: 0 }}>
         {/* Topbar removed because PersonalHeader provides it */}
         <main className="dash-content pb-20 md:pb-0" style={{ padding: 0, maxWidth: "100%", overflowX: "hidden" }}>
           <Outlet context={{ sidebarOpen, setSidebarOpen, user }} />

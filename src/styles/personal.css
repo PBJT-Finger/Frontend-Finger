@@ -3,7 +3,7 @@
 
 .pd-container {
   min-height: 100vh;
-  background-color: #f8fafc;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
