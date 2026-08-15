@@ -10,11 +10,21 @@ export default function PersonalRiwayatPage() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    let intervalId;
     if (token) {
       fetchPersonalHistory(token);
+
+      // Auto refresh every 60 seconds
+      intervalId = setInterval(() => {
+        fetchPersonalHistory(token);
+      }, 60000);
     } else {
       navigate("/login");
     }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [navigate]);
 
   const fetchPersonalHistory = async (token) => {

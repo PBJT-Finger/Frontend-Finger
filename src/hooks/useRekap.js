@@ -67,6 +67,7 @@ export function useRekap(activeSection, rekapTab) {
   }, []);
 
   useEffect(() => {
+    let intervalId;
     if (
       activeSection === "dosen" ||
       activeSection === "karyawan" ||
@@ -75,7 +76,17 @@ export function useRekap(activeSection, rekapTab) {
     ) {
       loadRekapData();
       loadDashboardSummary();
+
+      // Lightweight polling every 60 seconds for historical/summary data
+      intervalId = setInterval(() => {
+        loadRekapData();
+        loadDashboardSummary();
+      }, 60000);
     }
+    
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [loadRekapData, loadDashboardSummary, activeSection]);
 
   useEffect(() => {

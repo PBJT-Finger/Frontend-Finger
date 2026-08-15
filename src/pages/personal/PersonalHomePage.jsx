@@ -12,11 +12,21 @@ export default function PersonalHomePage() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    let intervalId;
     if (token) {
       fetchPersonalData(token);
+      
+      // Auto refresh every 60 seconds
+      intervalId = setInterval(() => {
+        fetchPersonalData(token);
+      }, 60000);
     } else {
       navigate("/login");
     }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [navigate]);
 
   const fetchPersonalData = async (token) => {
