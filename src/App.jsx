@@ -11,8 +11,16 @@ import {
 } from "react-router-dom";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
-import Dashboard from "./pages/Dashboard";
-import PersonalDashboard from "./pages/PersonalDashboard";
+import DashboardLayout from "./layouts/DashboardLayout";
+import OverviewPage from "./pages/dashboard/OverviewPage";
+import RealtimePage from "./pages/dashboard/RealtimePage";
+import RekapPage from "./pages/dashboard/RekapPage";
+import UserManagementPage from "./pages/dashboard/UserManagementPage";
+
+import PersonalLayout from "./layouts/PersonalLayout";
+import PersonalHomePage from "./pages/personal/PersonalHomePage";
+import PersonalRiwayatPage from "./pages/personal/PersonalRiwayatPage";
+import PersonalSettingsPage from "./pages/personal/PersonalSettingsPage";
 import { authService } from "./services/authService";
 
 // ==================== PROTECTED ROUTE ====================
@@ -47,16 +55,6 @@ const PublicRoute = ({ children }) => {
 };
 
 // ==================== MAIN APP ====================
-import DashboardLayout from "./layouts/DashboardLayout";
-import OverviewPage from "./pages/dashboard/OverviewPage";
-import RealtimePage from "./pages/dashboard/RealtimePage";
-import RekapPage from "./pages/dashboard/RekapPage";
-import UserManagementPage from "./pages/dashboard/UserManagementPage";
-
-import PersonalLayout from "./layouts/PersonalLayout";
-import PersonalHomePage from "./pages/personal/PersonalHomePage";
-import PersonalRiwayatPage from "./pages/personal/PersonalRiwayatPage";
-import PersonalSettingsPage from "./pages/personal/PersonalSettingsPage";
 
 function App() {
   return (
