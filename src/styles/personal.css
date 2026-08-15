@@ -206,22 +206,26 @@
 .pd-history-section {
   display: flex;
   flex-direction: column;
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
 }
 
 .pd-section-title {
   font-size: 18px;
   font-weight: 700;
   color: #1e293b;
-  margin: 0 0 16px 0;
+  margin: 0 0 20px 0;
 }
 
 .pd-empty-state {
   text-align: center;
   color: #94a3b8;
-  padding: 40px 0;
+  padding: 30px 0;
   font-size: 14px;
-  background: white;
-  border-radius: 20px;
+  border-radius: 12px;
   border: 1px dashed #cbd5e1;
 }
 
@@ -232,20 +236,20 @@
 }
 
 .pd-history-card {
-  background: white;
-  border-radius: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
   padding: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-  border: 1px solid #f1f5f9;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #e2e8f0;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .pd-history-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .pd-history-left {
