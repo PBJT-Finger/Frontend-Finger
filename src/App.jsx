@@ -47,53 +47,57 @@ const PublicRoute = ({ children }) => {
 };
 
 // ==================== MAIN APP ====================
+import DashboardLayout from "./layouts/DashboardLayout";
+import OverviewPage from "./pages/dashboard/OverviewPage";
+import RealtimePage from "./pages/dashboard/RealtimePage";
+import RekapPage from "./pages/dashboard/RekapPage";
+import UserManagementPage from "./pages/dashboard/UserManagementPage";
+
+import PersonalLayout from "./layouts/PersonalLayout";
+import PersonalHomePage from "./pages/personal/PersonalHomePage";
+import PersonalRiwayatPage from "./pages/personal/PersonalRiwayatPage";
+import PersonalSettingsPage from "./pages/personal/PersonalSettingsPage";
+
 function App() {
   return (
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/reset-password"
-          element={
-            <PublicRoute>
-              <ResetPassword />
-            </PublicRoute>
-          }
-        />
+        <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+        <Route path="/reset-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
 
-        {/* Protected Routes - ADMIN & PIMPINAN */}
+        {/* Protected Routes - ADMIN & PIMPINAN (Nested Routing) */}
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute allowedRoles={['admin', 'pimpinan', 'ADMIN', 'PIMPINAN']}>
-              <Dashboard />
+              <DashboardLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<OverviewPage />} />
+          <Route path="realtime" element={<RealtimePage />} />
+          <Route path="rekap-dosen" element={<RekapPage type="dosen" />} />
+          <Route path="rekap-karyawan" element={<RekapPage type="karyawan" />} />
+          <Route path="users" element={<UserManagementPage />} />
+        </Route>
 
-        {/* Protected Routes - DOSEN & KARYAWAN */}
+        {/* Protected Routes - DOSEN & KARYAWAN (Nested Routing) */}
         <Route
           path="/my-dashboard"
           element={
             <ProtectedRoute allowedRoles={['dosen', 'karyawan', 'DOSEN', 'KARYAWAN']}>
-              <PersonalDashboard />
+              <PersonalLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<PersonalHomePage />} />
+          <Route path="riwayat" element={<PersonalRiwayatPage />} />
+          <Route path="pengaturan" element={<PersonalSettingsPage />} />
+        </Route>
 
-        {/* Legacy /realtime route — redirect ke /dashboard */}
-        <Route
-          path="/realtime"
-          element={<Navigate to="/dashboard" replace />}
-        />
+        {/* Legacy routes mapping */}
+        <Route path="/realtime" element={<Navigate to="/dashboard/realtime" replace />} />
 
         {/* Default */}
         <Route path="/" element={<Navigate to="/login" replace />} />
