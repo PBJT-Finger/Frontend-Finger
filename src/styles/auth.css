@@ -170,6 +170,8 @@ button:active {
 .role-name {
   font-size: 14px;
   font-weight: 600;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .role-btn.active .role-name {
@@ -184,7 +186,8 @@ button:active {
   font-size: 10px;
   color: #6b7280;
   margin-top: 2px;
-  white-space: nowrap;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 @media (max-width: 480px) {
