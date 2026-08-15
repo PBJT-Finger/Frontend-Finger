@@ -19,8 +19,6 @@ import UserManagementPage from "./pages/dashboard/UserManagementPage";
 
 import PersonalLayout from "./layouts/PersonalLayout";
 import PersonalHomePage from "./pages/personal/PersonalHomePage";
-import PersonalRiwayatPage from "./pages/personal/PersonalRiwayatPage";
-import PersonalSettingsPage from "./pages/personal/PersonalSettingsPage";
 import { authService } from "./services/authService";
 
 // ==================== PROTECTED ROUTE ====================
@@ -90,8 +88,6 @@ function App() {
           }
         >
           <Route index element={<PersonalHomePage />} />
-          <Route path="riwayat" element={<PersonalRiwayatPage />} />
-          <Route path="pengaturan" element={<PersonalSettingsPage />} />
         </Route>
 
         {/* Legacy routes mapping */}
