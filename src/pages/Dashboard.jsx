@@ -19,6 +19,7 @@ import { authService } from "../services/authService";
 import { useEmployees } from "../hooks/useEmployees";
 import { useRekap } from "../hooks/useRekap";
 import { useRealtime } from "../hooks/useRealtime";
+import pushService from "../services/pushService";
 import "../styles/main.css";
 
 function Dashboard() {
@@ -55,7 +56,13 @@ function Dashboard() {
   const [modalError, setModalError] = useState("");
 
   useEffect(() => {
-    setUser(authService.getCurrentUser());
+    const currentUser = authService.getCurrentUser();
+    setUser(currentUser);
+    
+    // Auto-subscribe ke Web Push Notification
+    if (currentUser && currentUser.token) {
+      pushService.subscribeToPush(currentUser.token).catch(console.error);
+    }
   }, []);
 
   useEffect(() => {
