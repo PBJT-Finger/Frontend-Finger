@@ -128,12 +128,14 @@ button:active {
 /* Responsive Role Selector Group */
 .role-selector-group {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 6px;
 }
 
 .role-btn {
   flex: 1;
+  min-width: 90px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;

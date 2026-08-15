@@ -10,6 +10,7 @@ import {
   AlertCircle,
   ShieldCheck,
   Crown,
+  User,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../components/auth/AuthLayout";
@@ -50,11 +51,17 @@ const Login = () => {
       const result = await authService.login(formData.email, formData.password);
 
       // Enforce role comparison
-      const actualRole = result.user?.role || "admin";
-      if (actualRole.toLowerCase() !== selectedRole.toLowerCase()) {
+      const actualRole = result.user?.role?.toLowerCase() || "admin";
+      let isRoleMatch = false;
+
+      if (selectedRole === "admin" && (actualRole === "admin" || actualRole === "staf")) isRoleMatch = true;
+      if (selectedRole === "pimpinan" && actualRole === "pimpinan") isRoleMatch = true;
+      if (selectedRole === "karyawan" && (actualRole === "dosen" || actualRole === "karyawan")) isRoleMatch = true;
+
+      if (!isRoleMatch) {
         authService.logout();
         throw new Error(
-          `Akses Ditolak: Akun Anda memiliki peran ${actualRole.toUpperCase()}. Silakan masuk menggunakan pilihan peran yang sesuai.`,
+          `Akses Ditolak: Akun Anda terdaftar sebagai ${actualRole.toUpperCase()}. Silakan pilih menu masuk yang sesuai.`,
         );
       }
 
@@ -114,7 +121,24 @@ const Login = () => {
               />
               <div className="role-info">
                 <span className="role-name">Pimpinan</span>
-                <span className="role-desc">Akses laporan & rekap</span>
+                <span className="role-desc">Akses laporan</span>
+              </div>
+            </button>
+
+            {/* Card Dosen/Karyawan */}
+            <button
+              type="button"
+              onClick={() => setSelectedRole("karyawan")}
+              className={`role-btn ${selectedRole === "karyawan" ? "active" : "inactive"}`}
+            >
+              <User
+                size={16}
+                color={selectedRole === "karyawan" ? "#2563eb" : "#4b5563"}
+                className="role-icon"
+              />
+              <div className="role-info">
+                <span className="role-name">Dosen/Karyawan</span>
+                <span className="role-desc">Dasbor personal</span>
               </div>
             </button>
           </div>
