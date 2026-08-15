@@ -22,7 +22,7 @@ const AuthLayout = ({ children, title, subtitle }) => {
           borderRadius: "16px",
           boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
           width: "100%",
-          maxWidth: "420px",
+          maxWidth: "540px",
           overflow: "hidden",
           margin: "auto",
         }}
