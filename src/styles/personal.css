@@ -397,6 +397,13 @@
     flex-direction: row;
     align-items: center;
   }
+  
+  /* Membuat kolom kiri melayang (sticky) mengikuti scroll */
+  .pd-left-column {
+    position: sticky;
+    top: 24px;
+    height: max-content;
+  }
 }
 
 @media (min-width: 1024px) {
