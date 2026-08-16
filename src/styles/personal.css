@@ -121,10 +121,15 @@
   z-index: 10;
 }
 
+/* Kolom Kiri - Unified Sticky Panel */
 .pd-left-column {
+  background: white;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   display: flex;
   flex-direction: column;
-  gap: 24px;
 }
 
 .pd-right-column {
@@ -132,28 +137,15 @@
   flex-direction: column;
 }
 
-/* Kartu Ringkasan (Summary) - Glassmorphism */
-.pd-stats-container {
+/* Statistik di dalam Panel Terpadu */
+.pd-unified-stats {
   display: flex;
   gap: 20px;
   width: 100%;
 }
 
-.pd-stat-card {
+.pd-unified-stat-item {
   flex: 1;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.pd-stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 50px -10px rgba(0, 0, 0, 0.15);
 }
 
 .pd-stat-label {
@@ -173,16 +165,14 @@
   color: #1e293b;
 }
 
-/* Fitur Pengingat */
-.pd-feature-card {
-  background: white;
-  border-radius: 20px;
-  padding: 24px;
+/* Fitur Pengingat di dalam Panel Terpadu */
+.pd-unified-feature {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(255,255,255,0.8);
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid #f1f5f9;
 }
 
 .pd-feature-info {
@@ -379,23 +369,29 @@
 }
 
 /* Responsiveness Extensions */
-@media (min-width: 768px) {
-  .pd-stats-container {
-    gap: 24px;
+@media (max-width: 600px) {
+  .pd-unified-feature {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
   }
   
+  .pd-feature-btn {
+    width: 100%;
+  }
+  
+  .pd-left-column {
+    padding: 20px; /* Sedikit lebih sempit di mobile */
+  }
+}
+
+@media (min-width: 768px) {
   /* Desktop Layout: Fluid Grid */
   .pd-main {
     display: grid;
     grid-template-columns: 1fr 2fr;
     align-items: start;
     gap: 32px;
-  }
-  
-  /* Feature Card di Desktop - flex baris lebih mewah */
-  .pd-feature-card {
-    flex-direction: row;
-    align-items: center;
   }
   
   /* Membuat kolom kiri melayang (sticky) mengikuti scroll */

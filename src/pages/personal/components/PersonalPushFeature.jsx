@@ -25,7 +25,7 @@ export default function PersonalPushFeature() {
   };
 
   return (
-    <div className="pd-feature-card">
+    <div className="pd-unified-feature">
       <div className="pd-feature-info">
         <h3 className="pd-feature-title">Pengingat Absen</h3>
         <p className="pd-feature-desc">Terima notifikasi di HP Anda</p>
