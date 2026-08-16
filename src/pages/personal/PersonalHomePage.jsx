@@ -6,6 +6,8 @@ import PersonalHeader from "./components/PersonalHeader";
 import PersonalPushFeature from "./components/PersonalPushFeature";
 import PersonalHistorySection from "./components/PersonalHistorySection";
 
+import PersonalStats from "./components/PersonalStats";
+
 export default function PersonalHomePage() {
   const navigate = useNavigate();
   const { sidebarOpen, setSidebarOpen, user } = useOutletContext();
@@ -76,8 +78,13 @@ export default function PersonalHomePage() {
       />
 
       <main className="pd-main">
-        <PersonalPushFeature />
-        <PersonalHistorySection history={history} />
+        <div className="pd-left-column">
+          <PersonalStats summary={summary} />
+          <PersonalPushFeature />
+        </div>
+        <div className="pd-right-column">
+          <PersonalHistorySection history={history} />
+        </div>
       </main>
     </div>
   );
