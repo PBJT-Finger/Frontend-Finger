@@ -116,27 +116,26 @@ export default function Sidebar({
                 {user.name || user.username || "User"}
               </span>
               <span className="sidebar-user-email">{user.email || ""}</span>
-              {user.role?.toUpperCase() === "PIMPINAN" ? (
-                <span
-                  style={{
-                    fontSize: 10, fontWeight: 700, color: "#d97706",
-                    background: "#fef3c7", padding: "1px 6px",
-                    borderRadius: 4, width: "fit-content", marginTop: 4,
-                  }}
-                >
-                  PIMPINAN
-                </span>
-              ) : (
-                <span
-                  style={{
-                    fontSize: 10, fontWeight: 700, color: "#059669",
-                    background: "#d1fae5", padding: "1px 6px",
-                    borderRadius: 4, width: "fit-content", marginTop: 4,
-                  }}
-                >
-                  ADMIN
-                </span>
-              )}
+              {(() => {
+                const role = user.role?.toUpperCase();
+                const roleConfig = {
+                  PIMPINAN: { label: "PIMPINAN", color: "#d97706", bg: "#fef3c7" },
+                  ADMIN:    { label: "ADMIN",    color: "#059669", bg: "#d1fae5" },
+                  DOSEN:    { label: "DOSEN",    color: "#1d4ed8", bg: "#dbeafe" },
+                  KARYAWAN: { label: "KARYAWAN", color: "#7c3aed", bg: "#ede9fe" },
+                };
+                const cfg = roleConfig[role] || { label: role || "USER", color: "#64748b", bg: "#f1f5f9" };
+                return (
+                  <span style={{
+                    fontSize: 10, fontWeight: 700,
+                    color: cfg.color, background: cfg.bg,
+                    padding: "1px 6px", borderRadius: 4,
+                    width: "fit-content", marginTop: 4,
+                  }}>
+                    {cfg.label}
+                  </span>
+                );
+              })()}
             </div>
           </div>
         )}

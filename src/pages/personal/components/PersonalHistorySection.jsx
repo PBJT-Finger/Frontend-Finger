@@ -1,9 +1,27 @@
 import React from "react";
 import { Clock, CheckCircle2 } from "lucide-react";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import 'dayjs/locale/id';
 
+dayjs.extend(utc);
 dayjs.locale('id');
+
+/**
+ * Fungsi utilitas untuk memformat field @db.Time(0) dari Prisma.
+ * Kolom Time di MySQL dikembalikan sebagai '1970-01-01T07:00:00.000Z' (UTC epoch + waktu).
+ * Kita cukup ambil jam dan menit dari objek Date langsung (UTC), karena DB menyimpan
+ * waktu lokal namun Prisma memasukannya sebagai UTC epoch.
+ */
+function formatDbTime(timeValue) {
+  if (!timeValue) return '--:--';
+  const d = new Date(timeValue);
+  if (isNaN(d.getTime())) return '--:--';
+  // Ambil jam dan menit UTC (karena Prisma @db.Time menyimpan waktu lokal sebagai UTC epoch)
+  const h = String(d.getUTCHours()).padStart(2, '0');
+  const m = String(d.getUTCMinutes()).padStart(2, '0');
+  return `${h}.${m}`;
+}
 
 export default function PersonalHistorySection({ history }) {
   return (
@@ -46,8 +64,8 @@ export default function PersonalHistorySection({ history }) {
                         {item.status}
                       </span>
                     </td>
-                    <td>{dayjs(item.tanggal).format('HH.mm')}</td>
-                    <td>{item.waktu_keluar ? dayjs(item.waktu_keluar).format('HH.mm') : '--:--'}</td>
+                    <td>{formatDbTime(item.jam_masuk)}</td>
+                    <td>{formatDbTime(item.jam_keluar)}</td>
                   </tr>
                 );
               })}

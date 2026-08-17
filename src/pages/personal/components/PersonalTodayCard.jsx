@@ -3,8 +3,19 @@ import { Calendar, Info } from "lucide-react";
 import dayjs from "dayjs";
 
 export default function PersonalTodayCard({ user, todayRecord }) {
-  const jamMasuk = todayRecord?.tanggal ? dayjs(todayRecord.tanggal).format("HH:mm") : "--:--";
-  const jamPulang = todayRecord?.waktu_keluar ? dayjs(todayRecord.waktu_keluar).format("HH:mm") : "--:--";
+  // Prisma @db.Time(0) dikembalikan sebagai 1970-01-01T{HH:mm:ss}.000Z
+  // Harus pakai getUTCHours/getUTCMinutes karena DB menyimpan waktu lokal sebagai UTC epoch
+  const formatDbTime = (val) => {
+    if (!val) return '--:--';
+    const d = new Date(val);
+    if (isNaN(d.getTime())) return '--:--';
+    const h = String(d.getUTCHours()).padStart(2, '0');
+    const m = String(d.getUTCMinutes()).padStart(2, '0');
+    return `${h}:${m}`;
+  };
+
+  const jamMasuk = formatDbTime(todayRecord?.jam_masuk);
+  const jamPulang = formatDbTime(todayRecord?.jam_keluar);
   const userName = user?.name || user?.username || "-";
 
   return (
