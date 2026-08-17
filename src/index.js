@@ -20,20 +20,7 @@ root.render(
 reportWebVitals();
 
 // =========================================================================
-// CRITICAL: Aggressive Cache Busting / Service Worker Removal
+// PWA Support / Service Worker
 // =========================================================================
-// Jika versi sebelumnya menggunakan PWA/ServiceWorker yang membandel
-// dan me-nge-cache index.html, kita harus memaksanya untuk dihapus
-// agar pengguna selalu mendapatkan tampilan UI terbaru.
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then((registrations) => {
-    for (let registration of registrations) {
-      // Kecuali sw.js untuk push notification, kita unregister semuanya
-      // (Bisa juga unregister semua dan biarkan pushService meregister ulang)
-      console.log('Unregistering old service worker to clear cache:', registration);
-      registration.unregister();
-    }
-  }).catch((err) => {
-    console.error('Error during service worker unregistration:', err);
-  });
-}
+// Service Worker akan di-register oleh pushService.js.
+// Kita hapus kode unregister agresif di sini agar PWA dapat terinstall.

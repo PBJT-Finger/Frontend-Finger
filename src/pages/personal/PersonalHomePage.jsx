@@ -29,9 +29,44 @@ export default function PersonalHomePage() {
     }
 
     fetchPersonalData(token);
-    const intervalId = setInterval(() => fetchPersonalData(token), REFRESH_INTERVAL_MS);
 
-    return () => clearInterval(intervalId);
+    // Buka koneksi SSE untuk Real-time updates
+    const sseUrl = `${BASE_URL}/device/stream`;
+    const source = new EventSource(sseUrl);
+    let debounceTimer = null;
+
+    source.onopen = () => {
+      console.log("[SSE Personal] Connected for real-time updates");
+    };
+
+    source.addEventListener("attendance", (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        const newRecords = data.records || [];
+        
+        // Kita tidak bisa cek user_id secara pasti karena data absensi dari mesin mungkin anonim sebelum diproses, 
+        // tapi kita bisa refetch setiap kali ada event absensi (di-debounce 2 detik agar tidak spam)
+        if (newRecords.length > 0) {
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(() => {
+            console.log("[SSE Personal] New attendance detected, refetching personal data...");
+            fetchPersonalData(token);
+          }, 2000);
+        }
+      } catch (err) {
+        console.error("[SSE Personal] Failed to parse event:", err);
+      }
+    });
+
+    source.onerror = () => {
+      console.log("[SSE Personal] Connection error. Reconnecting...");
+      // Browser EventSource otomatis reconnect, tapi kita pastikan fallback aman
+    };
+
+    return () => {
+      source.close();
+      clearTimeout(debounceTimer);
+    };
   }, [navigate]);
 
   const fetchPersonalData = async (token) => {

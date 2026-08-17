@@ -1,6 +1,8 @@
 import React from "react";
 import { ChevronLeft, ChevronRight, LogOut, BarChart2, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { Download } from "lucide-react";
+import { usePwaInstall } from "../../hooks/usePwaInstall";
 
 /**
  * Sidebar navigation component.
@@ -16,6 +18,9 @@ export default function Sidebar({
   user,
   handleLogout,
 }) {
+  const { isInstallable, handleInstallClick } = usePwaInstall();
+  const isPersonalRole = user?.role === "DOSEN" || user?.role === "KARYAWAN";
+
   return (
     <aside className="dash-sidebar">
       <div className="sidebar-brand">
@@ -95,6 +100,12 @@ export default function Sidebar({
       </nav>
 
       <div className="sidebar-footer">
+        {isInstallable && isPersonalRole && sidebarOpen && (
+          <button className="sidebar-install-btn" onClick={handleInstallClick} title="Install App">
+            <Download size={16} />
+            <span>Install App</span>
+          </button>
+        )}
         {user && sidebarOpen && (
           <div className="sidebar-user">
             <div className="sidebar-user-avatar">

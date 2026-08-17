@@ -39,3 +39,9 @@ self.addEventListener('notificationclick', function(event) {
     })
   );
 });
+
+// Wajib untuk Progressive Web App (PWA) agar dikenali Chrome sebagai "Installable"
+self.addEventListener('fetch', function(event) {
+  // Biarkan browser menangani fetch seperti biasa (tidak ada offline caching)
+  return;
+});
