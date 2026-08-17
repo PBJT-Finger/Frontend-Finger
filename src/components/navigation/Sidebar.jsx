@@ -1,7 +1,14 @@
 import React from "react";
-import { ChevronLeft, ChevronRight, X, LogOut, BarChart2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, LogOut, BarChart2, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
+/**
+ * Sidebar navigation component.
+ * - On desktop (>=769px): collapses to icon-only strip when sidebarOpen=false.
+ * - On mobile (<769px): slides in from left as an overlay; toggle is in the topbar.
+ * The sidebar-toggle-btn (chevron) is HIDDEN on mobile via CSS.
+ * The mobile-close-btn (X) is HIDDEN on desktop via CSS.
+ */
 export default function Sidebar({
   sidebarOpen,
   setSidebarOpen,
@@ -23,6 +30,8 @@ export default function Sidebar({
             </div>
           )}
         </div>
+
+        {/* Desktop only: collapse/expand chevron toggle */}
         <button
           className="sidebar-toggle-btn"
           onClick={() => setSidebarOpen((o) => !o)}
@@ -30,14 +39,15 @@ export default function Sidebar({
         >
           {sidebarOpen ? <ChevronLeft size={15} /> : <ChevronRight size={15} />}
         </button>
-        {sidebarOpen && (
-          <button
-            className="mobile-close-btn"
-            onClick={() => setSidebarOpen(false)}
-          >
-            <X size={15} />
-          </button>
-        )}
+
+        {/* Mobile only: close (X) button inside sidebar header */}
+        <button
+          className="mobile-close-btn"
+          onClick={() => setSidebarOpen(false)}
+          title="Tutup"
+        >
+          <X size={15} />
+        </button>
       </div>
 
       <nav className="sidebar-nav">
@@ -50,8 +60,9 @@ export default function Sidebar({
               `sidebar-nav-item ${isActive ? "active" : ""}`
             }
             onClick={() => {
-              if (window.innerWidth < 768) {
-                setSidebarOpen(false); // Auto close on mobile if using sidebar
+              // Auto-close sidebar on mobile after navigation
+              if (window.innerWidth < 769) {
+                setSidebarOpen(false);
               }
             }}
             title={!sidebarOpen ? label : undefined}
@@ -97,14 +108,9 @@ export default function Sidebar({
               {user.role?.toUpperCase() === "PIMPINAN" ? (
                 <span
                   style={{
-                    fontSize: 10,
-                    fontWeight: 700,
-                    color: "#d97706",
-                    background: "#fef3c7",
-                    padding: "1px 6px",
-                    borderRadius: 4,
-                    width: "fit-content",
-                    marginTop: 4,
+                    fontSize: 10, fontWeight: 700, color: "#d97706",
+                    background: "#fef3c7", padding: "1px 6px",
+                    borderRadius: 4, width: "fit-content", marginTop: 4,
                   }}
                 >
                   PIMPINAN
@@ -112,14 +118,9 @@ export default function Sidebar({
               ) : (
                 <span
                   style={{
-                    fontSize: 10,
-                    fontWeight: 700,
-                    color: "#059669",
-                    background: "#d1fae5",
-                    padding: "1px 6px",
-                    borderRadius: 4,
-                    width: "fit-content",
-                    marginTop: 4,
+                    fontSize: 10, fontWeight: 700, color: "#059669",
+                    background: "#d1fae5", padding: "1px 6px",
+                    borderRadius: 4, width: "fit-content", marginTop: 4,
                   }}
                 >
                   ADMIN

@@ -9,6 +9,7 @@ export default function PersonalLayout() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 769);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 769);
 
   useEffect(() => {
     const currentUser = authService.getCurrentUser();
@@ -17,8 +18,10 @@ export default function PersonalLayout() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 769) setSidebarOpen(false);
-      else setSidebarOpen(true);
+      const mobile = window.innerWidth < 769;
+      setIsMobile(mobile);
+      if (!mobile) setSidebarOpen(true);
+      else setSidebarOpen(false);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -53,7 +56,7 @@ export default function PersonalLayout() {
 
       <BottomNav navItems={navItems} />
 
-      {sidebarOpen && window.innerWidth < 768 && (
+      {sidebarOpen && isMobile && (
         <div className="sidebar-backdrop" onClick={() => setSidebarOpen(false)} />
       )}
     </div>

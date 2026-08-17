@@ -1,45 +1,58 @@
 import React from "react";
-import { Calendar } from "lucide-react";
+import { Clock, CheckCircle2 } from "lucide-react";
+import dayjs from "dayjs";
+import 'dayjs/locale/id';
+
+dayjs.locale('id');
 
 export default function PersonalHistorySection({ history }) {
   return (
-    <div className="pd-history-section">
-      <h2 className="pd-section-title">Riwayat Terakhir</h2>
+    <div className="pd-card">
+      <div className="pd-card-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+        <h3 className="pd-card-title">Riwayat Absensi</h3>
+      </div>
       
-      {(!history || history.length === 0) ? (
+      {history.length === 0 ? (
         <div className="pd-empty-state">
-          Belum ada data kehadiran bulan ini.
+          Belum ada riwayat absensi.
         </div>
       ) : (
-        <div className="pd-history-list">
-          {history.map((record) => {
-            const dateObj = new Date(record.tanggal);
-            const isLate = record.status === 'TERLAMBAT';
-            
-            return (
-              <div key={record.id} className="pd-history-card">
-                <div className="pd-history-left">
-                  <div className={`pd-history-icon-wrapper ${isLate ? 'late' : 'ontime'}`}>
-                    <Calendar size={20} />
-                  </div>
-                  <div className="pd-history-details">
-                    <p className="pd-history-date">
-                      {dateObj.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short' })}
-                    </p>
-                    <p className={`pd-history-status ${isLate ? 'late' : 'ontime'}`}>
-                      {record.status}
-                    </p>
-                  </div>
-                </div>
-                <div className="pd-history-right">
-                  <p className="pd-history-time">
-                    {record.jam_masuk ? record.jam_masuk.substring(11, 16) : '--:--'}
-                  </p>
-                  <p className="pd-history-type">Masuk</p>
-                </div>
-              </div>
-            );
-          })}
+        <div className="pd-table-container">
+          <table className="pd-table">
+            <thead>
+              <tr>
+                <th>NO</th>
+                <th>TANGGAL</th>
+                <th>HARI</th>
+                <th>STATUS</th>
+                <th>JAM MASUK</th>
+                <th>JAM PULANG</th>
+              </tr>
+            </thead>
+            <tbody>
+              {history.map((item, index) => {
+                const isLate = item.status === "TERLAMBAT";
+                const dateObj = dayjs(item.tanggal);
+                
+                return (
+                  <tr key={item.id}>
+                    <td>{index + 1}</td>
+                    <td>{dateObj.format('DD MMMM YYYY')}</td>
+                    <td>{dateObj.format('dddd')}</td>
+                    <td>
+                      <span className={`pd-badge ${isLate ? 'late' : 'ontime'}`}>
+                        {isLate ? <Clock size={12} /> : <CheckCircle2 size={12} />}
+                        {item.status}
+                      </span>
+                    </td>
+                    <td>{dayjs(item.tanggal).format('HH.mm')}</td>
+                    <td>{item.waktu_keluar ? dayjs(item.waktu_keluar).format('HH.mm') : '--:--'}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

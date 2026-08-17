@@ -19,6 +19,7 @@ export default function DashboardLayout() {
   const location = useLocation();
   const [user, setUser] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 769);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 769);
 
   // Pakai hook karyawan untuk dapat badge 'unregisteredCount'
   const { unregisteredCount } = useEmployees();
@@ -30,8 +31,10 @@ export default function DashboardLayout() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 769) setSidebarOpen(false);
-      else setSidebarOpen(true);
+      const mobile = window.innerWidth < 769;
+      setIsMobile(mobile);
+      if (!mobile) setSidebarOpen(true);
+      else setSidebarOpen(false);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -110,8 +113,8 @@ export default function DashboardLayout() {
       {/* Bottom Navigation untuk Mobile */}
       <BottomNav navItems={navItems} />
 
-      {/* Backdrop Mobile untuk Sidebar */}
-      {sidebarOpen && window.innerWidth < 768 && (
+      {/* Backdrop Mobile untuk Sidebar (reactive) */}
+      {sidebarOpen && isMobile && (
         <div className="sidebar-backdrop" onClick={() => setSidebarOpen(false)} />
       )}
     </div>
