@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Home } from "lucide-react";
 import Sidebar from "../components/navigation/Sidebar";
-import BottomNav from "../components/navigation/BottomNav";
 import { authService } from "../services/authService";
 
 export default function PersonalLayout() {
@@ -49,12 +48,10 @@ export default function PersonalLayout() {
       {/* Main Container edge-to-edge */}
       <div className="dash-main" style={{ backgroundColor: "#f1f5f9", padding: 0 }}>
         {/* Topbar removed because PersonalHeader provides it */}
-        <main className="dash-content pb-20 md:pb-0" style={{ padding: 0, maxWidth: "100%", overflowX: "hidden" }}>
+        <main className="dash-content" style={{ padding: 0, maxWidth: "100%", overflowX: "hidden" }}>
           <Outlet context={{ sidebarOpen, setSidebarOpen, user }} />
         </main>
       </div>
-
-      <BottomNav navItems={navItems} />
 
       {sidebarOpen && isMobile && (
         <div className="sidebar-backdrop" onClick={() => setSidebarOpen(false)} />

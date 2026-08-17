@@ -42,30 +42,9 @@
 }
 
 .pd-page-subtitle {
-  font-size: 14px;
-  color: #64748b;
   margin: 0;
-}
-
-.pd-logout-btn {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-size: 13px;
   color: #64748b;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.pd-logout-btn:hover {
-  background: #f8fafc;
-  color: #ef4444;
-  border-color: #fca5a5;
 }
 
 /* Mobile menu toggle — hidden on desktop */

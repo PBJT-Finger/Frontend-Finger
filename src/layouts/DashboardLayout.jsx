@@ -10,7 +10,6 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Sidebar from "../components/navigation/Sidebar";
-import BottomNav from "../components/navigation/BottomNav";
 import { authService } from "../services/authService";
 import { useEmployees } from "../hooks/useEmployees";
 
@@ -109,9 +108,6 @@ export default function DashboardLayout() {
           <Outlet />
         </main>
       </div>
-
-      {/* Bottom Navigation untuk Mobile */}
-      <BottomNav navItems={navItems} />
 
       {/* Backdrop Mobile untuk Sidebar (reactive) */}
       {sidebarOpen && isMobile && (

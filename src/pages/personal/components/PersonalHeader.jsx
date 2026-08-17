@@ -37,17 +37,8 @@ export default function PersonalHeader({ user, sidebarOpen, setSidebarOpen }) {
         </div>
         <h1 className="pd-page-title">Dashboard {roleLabel}</h1>
         <p className="pd-page-subtitle">
-          Selamat datang, {user?.nama || "Pegawai"}. Berikut ringkasan kehadiran pribadi Anda.
+          Selamat datang, {user?.name || user?.username || "Pegawai"}. Berikut ringkasan kehadiran pribadi Anda.
         </p>
-      </div>
-
-      <button
-        onClick={handleLogout}
-        className="pd-logout-btn"
-        title="Keluar"
-      >
-        <LogOut size={20} />
-      </button>
     </header>
   );
 }
