@@ -39,6 +39,7 @@ export default function PersonalHeader({ user, sidebarOpen, setSidebarOpen }) {
         <p className="pd-page-subtitle">
           Selamat datang, {user?.name || user?.username || "Pegawai"}. Berikut ringkasan kehadiran pribadi Anda.
         </p>
+      </div>
     </header>
   );
 }

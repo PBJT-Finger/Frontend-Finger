@@ -161,7 +161,7 @@ const FilterPanel = ({
               Sesi Kelas
             </h3>
 
-            <div className="rt-session-pills" style={{ maxWidth: "320px", marginBottom: "12px" }}>
+            <div className="session-btn-group" style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "12px", width: "100%" }}>
               {Object.entries(SESSION_CONFIG).map(([key, cfg]) => {
                 const Icon = cfg.icon;
                 const isActive = activeSession === key;
@@ -172,6 +172,7 @@ const FilterPanel = ({
                     key={key}
                     onClick={() => onSessionChange(key)}
                     className={`rt-pill ${pillCls} ${isActive ? "active" : ""}`}
+                    style={{ flex: "1 1 auto", justifyContent: "center" }}
                   >
                     <Icon size={13} /> {labelText}
                   </button>

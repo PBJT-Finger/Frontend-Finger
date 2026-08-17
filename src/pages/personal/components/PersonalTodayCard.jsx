@@ -1,9 +1,11 @@
 import React from "react";
 import { Calendar, Info } from "lucide-react";
+import dayjs from "dayjs";
 
 export default function PersonalTodayCard({ user, todayRecord }) {
-  const jamMasuk = todayRecord?.jam_masuk || "--:--";
-  const jamPulang = todayRecord?.waktu_keluar || "--:--";
+  const jamMasuk = todayRecord?.tanggal ? dayjs(todayRecord.tanggal).format("HH:mm") : "--:--";
+  const jamPulang = todayRecord?.waktu_keluar ? dayjs(todayRecord.waktu_keluar).format("HH:mm") : "--:--";
+  const userName = user?.name || user?.username || "-";
 
   return (
     <div className="pd-middle-grid">
@@ -37,7 +39,7 @@ export default function PersonalTodayCard({ user, todayRecord }) {
         <div className="pd-info-list">
           <div className="pd-info-item">
             <span className="pd-info-label">Nama</span>
-            <span className="pd-info-value">{user?.nama || "-"}</span>
+            <span className="pd-info-value">{userName}</span>
           </div>
           <div className="pd-info-item">
             <span className="pd-info-label">Role</span>
