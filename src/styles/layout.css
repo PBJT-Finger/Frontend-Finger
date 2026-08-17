@@ -14,8 +14,8 @@
 .dash-sidebar {
   display: flex;
   flex-direction: column;
-  background: white;
-  border-right: 1px solid #e2e8f0;
+  background: #1d4ed8; /* Blue-700 */
+  border-right: none;
   transition: width 0.3s ease;
   z-index: 50;
   height: 100%;
@@ -35,7 +35,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-brand-left {
@@ -45,7 +45,7 @@
 }
 
 .sidebar-brand-icon {
-  color: #3b82f6;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,20 +59,20 @@
 
 .sidebar-brand-title {
   font-weight: 700;
-  color: #0f172a;
+  color: white;
   font-size: 15px;
 }
 
 .sidebar-brand-sub {
   font-size: 11px;
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.65);
   font-weight: 500;
 }
 
 .sidebar-toggle-btn, .mobile-close-btn {
   background: none;
   border: none;
-  color: #94a3b8;
+  color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
   padding: 4px;
   display: flex;
@@ -83,8 +83,8 @@
 }
 
 .sidebar-toggle-btn:hover, .mobile-close-btn:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
 }
 
 .sidebar-nav {
@@ -101,7 +101,7 @@
   align-items: center;
   padding: 10px 12px;
   border-radius: 8px;
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.75);
   text-decoration: none;
   transition: all 0.2s ease;
   position: relative;
@@ -109,13 +109,13 @@
 }
 
 .sidebar-nav-item:hover {
-  background-color: #f8fafc;
-  color: #3b82f6;
+  background-color: rgba(255, 255, 255, 0.12);
+  color: white;
 }
 
 .sidebar-nav-item.active {
-  background-color: #eff6ff;
-  color: #2563eb;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
   font-weight: 600;
 }
 
@@ -137,7 +137,7 @@
 }
 
 .sidebar-badge {
-  background-color: #3b82f6;
+  background-color: rgba(255, 255, 255, 0.25);
   color: white;
   font-size: 10px;
   font-weight: 700;
@@ -160,9 +160,9 @@
   right: -2px;
   width: 8px;
   height: 8px;
-  background-color: #ef4444;
+  background-color: #fbbf24;
   border-radius: 50%;
-  border: 1.5px solid white;
+  border: 1.5px solid #1d4ed8;
 }
 
 .sidebar-nav-arrow {
@@ -186,7 +186,7 @@
 
 .sidebar-footer {
   padding: 16px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -197,7 +197,7 @@
   align-items: center;
   gap: 12px;
   padding: 8px;
-  background: #f8fafc;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -206,7 +206,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #2563eb;
+  background: rgba(255, 255, 255, 0.25);
   color: white;
   display: flex;
   align-items: center;
@@ -225,12 +225,12 @@
 .sidebar-user-name {
   font-size: 13px;
   font-weight: 600;
-  color: #0f172a;
+  color: white;
 }
 
 .sidebar-user-email {
   font-size: 11px;
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .sidebar-logout-btn {
@@ -240,9 +240,9 @@
   gap: 8px;
   width: 100%;
   padding: 10px;
-  background: #fef2f2;
-  color: #dc2626;
-  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
@@ -251,7 +251,9 @@
 }
 
 .sidebar-logout-btn:hover {
-  background: #fecaca;
+  background: rgba(239, 68, 68, 0.3);
+  color: white;
+  border-color: rgba(239, 68, 68, 0.4);
 }
 
 .sidebar-collapsed .sidebar-footer {
