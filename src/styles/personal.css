@@ -137,6 +137,40 @@
   font-size: 14px;
 }
 
+.pd-profile-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.pd-subscribe-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  background: #e0e7ff;
+  color: #4338ca;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(67, 56, 202, 0.1);
+}
+
+.pd-subscribe-btn:hover:not(:disabled) {
+  background: #c7d2fe;
+}
+
+.pd-subscribe-btn.subscribed {
+  background: #f1f5f9;
+  color: #64748b;
+  box-shadow: none;
+  cursor: default;
+}
+
 /* Stats Row */
 .pd-stats-grid {
   display: grid;
@@ -369,6 +403,14 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
+  }
+  .pd-profile-actions {
+    align-items: flex-start;
+    width: 100%;
+  }
+  .pd-subscribe-btn {
+    width: 100%;
+    justify-content: center;
   }
   .pd-today-boxes {
     grid-template-columns: 1fr;

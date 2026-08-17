@@ -48,7 +48,7 @@ export default function PersonalProfileCard({ user }) {
         </div>
       </div>
       
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '12px' }}>
+      <div className="pd-profile-actions">
         <div className="pd-profile-right" style={{ marginBottom: 0 }}>
           <Mail size={16} />
           {user?.email || "email@pbjt.ac.id"}
@@ -58,21 +58,7 @@ export default function PersonalProfileCard({ user }) {
           <button 
             onClick={handleSubscribe} 
             disabled={isSubscribed || loadingPush}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '8px 16px',
-              borderRadius: '20px',
-              border: 'none',
-              background: isSubscribed ? '#f1f5f9' : '#e0e7ff',
-              color: isSubscribed ? '#64748b' : '#4338ca',
-              fontSize: '13px',
-              fontWeight: 600,
-              cursor: (isSubscribed || loadingPush) ? 'default' : 'pointer',
-              transition: 'all 0.2s ease',
-              boxShadow: isSubscribed ? 'none' : '0 2px 4px rgba(67, 56, 202, 0.1)'
-            }}
+            className={`pd-subscribe-btn ${isSubscribed ? 'subscribed' : ''}`}
           >
             {loadingPush ? (
               <Loader2 size={16} className="animate-spin" />
