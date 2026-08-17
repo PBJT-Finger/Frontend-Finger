@@ -5,11 +5,21 @@
     {
       "src": "logo-pbjt.png",
       "type": "image/png",
-      "sizes": "192x192 512x512"
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo-pbjt.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff"
+  "orientation": "portrait",
+  "theme_color": "#1d4ed8",
+  "background_color": "#ffffff",
+  "description": "Sistem Rekap Absensi Politeknik Baja Tegal"
 }

@@ -20,7 +20,24 @@ root.render(
 reportWebVitals();
 
 // =========================================================================
-// PWA Support / Service Worker
+// PWA: Tangkap beforeinstallprompt SEBELUM React render
+// Event ini ditembakkan browser sangat awal — jauh sebelum useEffect berjalan.
+// Kita simpan ke window.__pwaPrompt agar bisa diakses kapan saja oleh hook.
 // =========================================================================
-// Service Worker akan di-register oleh pushService.js.
-// Kita hapus kode unregister agresif di sini agar PWA dapat terinstall.
+window.__pwaPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  window.__pwaPrompt = e;
+  // Dispatch custom event agar hook yang sudah mount bisa merespon
+  window.dispatchEvent(new CustomEvent('pwa-installable'));
+});
+
+// =========================================================================
+// PWA: Register Service Worker sedini mungkin
+// SW harus aktif agar browser mengenali app sebagai PWA yang bisa di-install.
+// =========================================================================
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch((err) => {
+    console.warn('[SW] Registration failed:', err);
+  });
+}

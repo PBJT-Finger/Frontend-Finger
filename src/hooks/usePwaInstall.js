@@ -1,41 +1,57 @@
 import { useState, useEffect } from "react";
 
+/**
+ * Hook untuk menangani PWA install prompt.
+ *
+ * Strategi dua lapis:
+ * 1. Cek window.__pwaPrompt (event yang ditangkap SEBELUM React mount di index.js)
+ * 2. Dengarkan custom event 'pwa-installable' untuk kasus event tiba SETELAH mount
+ *
+ * Ini diperlukan karena browser menembakkan 'beforeinstallprompt' sangat awal,
+ * jauh sebelum useEffect berjalan, sehingga listener biasa akan selalu terlewat.
+ */
 export function usePwaInstall() {
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [isInstallable, setIsInstallable] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(() => {
+    // Langsung ambil dari window jika sudah ditangkap sebelum mount
+    return window.__pwaPrompt || null;
+  });
+
+  const isInstallable = deferredPrompt !== null;
 
   useEffect(() => {
-    const handleBeforeInstallPrompt = (e) => {
-      // Mencegah browser menampilkan prompt default secara otomatis
-      e.preventDefault();
-      // Menyimpan event agar bisa dipicu nanti dengan tombol kustom
-      setDeferredPrompt(e);
-      setIsInstallable(true);
+    // Jika sudah ada dari window (event terjadi sebelum mount), tidak perlu listener lagi
+    if (window.__pwaPrompt && !deferredPrompt) {
+      setDeferredPrompt(window.__pwaPrompt);
+    }
+
+    // Dengarkan custom event untuk kasus event tiba setelah komponen mount
+    const handleInstallable = () => {
+      if (window.__pwaPrompt) {
+        setDeferredPrompt(window.__pwaPrompt);
+      }
     };
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-
+    window.addEventListener("pwa-installable", handleInstallable);
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener("pwa-installable", handleInstallable);
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) {
-      return;
-    }
-    // Tampilkan prompt instalasi PWA
+    if (!deferredPrompt) return;
+
     deferredPrompt.prompt();
-    // Tunggu respon pengguna
     const { outcome } = await deferredPrompt.userChoice;
+
     if (outcome === "accepted") {
-      console.log("User accepted the install prompt");
+      console.log("[PWA] User accepted the install prompt");
     } else {
-      console.log("User dismissed the install prompt");
+      console.log("[PWA] User dismissed the install prompt");
     }
-    // Reset state setelah prompt selesai
+
+    // Reset setelah prompt digunakan — prompt hanya bisa dipakai sekali
+    window.__pwaPrompt = null;
     setDeferredPrompt(null);
-    setIsInstallable(false);
   };
 
   return { isInstallable, handleInstallClick };
