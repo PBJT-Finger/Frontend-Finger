@@ -12,6 +12,10 @@ import { useState, useEffect } from "react";
  */
 export function usePwaInstall() {
   const [deferredPrompt, setDeferredPrompt] = useState(() => {
+    // Jika aplikasi berjalan di mode PWA (standalone/terinstal), prompt tidak perlu ada
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return null;
+    }
     // Langsung ambil dari window jika sudah ditangkap sebelum mount
     return window.__pwaPrompt || null;
   });
@@ -19,6 +23,11 @@ export function usePwaInstall() {
   const isInstallable = deferredPrompt !== null;
 
   useEffect(() => {
+    // Jika sedang di mode standalone, jangan tangani event install
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return;
+    }
+
     // Jika sudah ada dari window (event terjadi sebelum mount), tidak perlu listener lagi
     if (window.__pwaPrompt && !deferredPrompt) {
       setDeferredPrompt(window.__pwaPrompt);

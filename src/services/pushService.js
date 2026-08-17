@@ -60,7 +60,8 @@ const pushService = {
       }
 
       // 5. Kirim data langganan (subscription) ke backend kita
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3333'}/api/notifications/subscribe`, {
+      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3333/api';
+      const response = await fetch(`${API_URL}/notifications/subscribe`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
