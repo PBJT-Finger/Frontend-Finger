@@ -1,9 +1,19 @@
 /**
  * Service Worker for Attendance System (PWA & Push Notifications)
  * 
- * Note: No-op fetch handler has been removed per Chromium 89+ guidelines
- * to prevent unnecessary navigation latency overhead.
+ * Note: No-op fetch handler has been removed per Chromium 89+ guidelines.
+ * Immediate activation lifecycle handlers added to ensure instant cache invalidation.
  */
+
+self.addEventListener('install', function(event) {
+  // Langsung aktifkan versi service worker baru tanpa menunggu tab ditutup
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', function(event) {
+  // Ambil kendali halaman seketika saat service worker baru aktif
+  event.waitUntil(clients.claim());
+});
 
 self.addEventListener('push', function(event) {
   let data = {};

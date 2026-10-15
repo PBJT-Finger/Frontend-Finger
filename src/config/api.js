@@ -5,7 +5,10 @@
  */
 
 export const DEFAULT_API_URL = "https://finger-be.pbjt.ac.id/api";
-export const API_BASE_URL = process.env.REACT_APP_API_URL || DEFAULT_API_URL;
+
+// Fail-safe normalization: paksa ubah pbjt.web.id -> pbjt.ac.id jika ada env/secret lama yang tertinggal
+const rawApiUrl = (process.env.REACT_APP_API_URL || DEFAULT_API_URL).trim();
+export const API_BASE_URL = rawApiUrl.replace("pbjt.web.id", "pbjt.ac.id");
 
 export const API_ENDPOINTS = {
   AUTH: {
