@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config/api';
 import React, { useState, useEffect } from "react";
 import { LogOut, Calendar, Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +38,7 @@ function PersonalDashboard() {
 
   const fetchPersonalData = async (token) => {
     try {
-      const BASE_URL = process.env.REACT_APP_API_URL || "https://finger-be.pbjt.web.id/api";
+      const BASE_URL = API_BASE_URL;
       
       const [sumRes, histRes] = await Promise.all([
         fetch(`${BASE_URL}/personal/me/summary`, { headers: { Authorization: `Bearer ${token}` } }),

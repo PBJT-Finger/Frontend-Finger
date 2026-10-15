@@ -76,7 +76,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL || '/api' }}
+            REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL || 'https://finger-be.pbjt.ac.id/api' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
@@ -217,4 +217,4 @@ jobs:
 # - DEPLOY_PATH       : default /opt/finger
 # - TAILSCALE_AUTHKEY
 # - GHCR_PAT, GHCR_USERNAME (optional)
-# - REACT_APP_API_URL : e.g. https://api.yourdomain.com/api (optional, default /api)
+# - REACT_APP_API_URL : e.g. https://finger-be.pbjt.ac.id/api (optional, default https://finger-be.pbjt.ac.id/api)

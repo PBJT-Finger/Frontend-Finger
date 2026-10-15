@@ -1,5 +1,4 @@
-const BASE_URL =
-  process.env.REACT_APP_API_URL || "https://finger-be.pbjt.web.id/api";
+import { API_BASE_URL } from "../config/api";
 
 export const authService = {
   // ==================== LOGIN ====================
@@ -8,7 +7,7 @@ export const authService = {
       throw new Error("Email dan password wajib diisi");
     }
 
-    const res = await fetch(`${BASE_URL}/auth/login`, {
+    const res = await fetch(`${API_BASE_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -27,11 +26,9 @@ export const authService = {
     return { token: tokens.access_token, user };
   },
 
-
-
   // ==================== FORGOT PASSWORD ====================
   async forgotPassword(email) {
-    const res = await fetch(`${BASE_URL}/auth/forgot-password`, {
+    const res = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
@@ -44,7 +41,7 @@ export const authService = {
 
   // ==================== VERIFY RESET CODE ====================
   async verifyResetCode(email, code) {
-    const res = await fetch(`${BASE_URL}/auth/verify-code`, {
+    const res = await fetch(`${API_BASE_URL}/auth/verify-code`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, code }),
@@ -57,7 +54,7 @@ export const authService = {
 
   // ==================== RESET PASSWORD ====================
   async resetPassword(email, code, newPassword) {
-    const res = await fetch(`${BASE_URL}/auth/reset-password`, {
+    const res = await fetch(`${API_BASE_URL}/auth/reset-password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, code, newPassword }),

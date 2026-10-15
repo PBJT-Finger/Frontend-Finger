@@ -1,8 +1,9 @@
 // ==================== API SERVICE ====================
 // File: src/services/apiService.js
 
-const BASE_URL =
-  process.env.REACT_APP_API_URL || "https://finger-be.pbjt.web.id/api";
+import { API_BASE_URL } from '../config/api';
+
+const BASE_URL = API_BASE_URL;
 
 const getAuthHeader = () => ({
   Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -346,3 +347,4 @@ export const apiService = {
     }
   },
 };
+

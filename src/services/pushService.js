@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config/api';
 // ==================== PUSH NOTIFICATION SERVICE ====================
 // File: src/services/pushService.js
 
@@ -60,7 +61,7 @@ const pushService = {
       }
 
       // 5. Kirim data langganan (subscription) ke backend kita
-      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3333/api';
+      const API_URL = API_BASE_URL;
       const response = await fetch(`${API_URL}/notifications/subscribe`, {
         method: 'POST',
         headers: {

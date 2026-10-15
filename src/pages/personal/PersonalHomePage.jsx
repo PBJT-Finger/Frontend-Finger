@@ -8,8 +8,9 @@ import PersonalTodayCard from "./components/PersonalTodayCard";
 import PersonalHistorySection from "./components/PersonalHistorySection";
 import "../../styles/personal.css";
 
-const BASE_URL =
-  process.env.REACT_APP_API_URL || "https://finger-be.pbjt.web.id/api";
+import { API_BASE_URL } from '../../config/api';
+
+const BASE_URL = API_BASE_URL;
 const REFRESH_INTERVAL_MS = 60000;
 
 export default function PersonalHomePage() {

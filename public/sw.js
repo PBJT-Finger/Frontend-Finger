@@ -1,3 +1,10 @@
+/**
+ * Service Worker for Attendance System (PWA & Push Notifications)
+ * 
+ * Note: No-op fetch handler has been removed per Chromium 89+ guidelines
+ * to prevent unnecessary navigation latency overhead.
+ */
+
 self.addEventListener('push', function(event) {
   let data = {};
   if (event.data) {
@@ -11,8 +18,8 @@ self.addEventListener('push', function(event) {
   const title = data.title || 'Attendance System';
   const options = {
     body: data.body || 'Ada pembaruan absen terbaru.',
-    icon: '/logo192.png',
-    badge: '/logo192.png',
+    icon: '/logo-pbjt.png',
+    badge: '/logo-pbjt.png',
     data: data.data || {}
   };
 
@@ -38,10 +45,4 @@ self.addEventListener('notificationclick', function(event) {
       return clients.openWindow('/');
     })
   );
-});
-
-// Wajib untuk Progressive Web App (PWA) agar dikenali Chrome sebagai "Installable"
-self.addEventListener('fetch', function(event) {
-  // Biarkan browser menangani fetch seperti biasa (tidak ada offline caching)
-  return;
 });

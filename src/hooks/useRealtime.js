@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config/api';
 import { useState, useCallback, useEffect, useRef } from "react";
 import { apiService } from "../services/apiService";
 
@@ -107,7 +108,7 @@ export function useRealtime(activeSection, dbStats, dosenData, karyawanData) {
       setRtLoading(true);
       loadFeedRef.current();
 
-      const sseUrl = `${process.env.REACT_APP_API_URL || "https://finger-be.pbjt.web.id/api"}/device/stream`;
+      const sseUrl = `${API_BASE_URL}/device/stream`;
       const source = new EventSource(sseUrl);
       sseRef.current = source;
 
